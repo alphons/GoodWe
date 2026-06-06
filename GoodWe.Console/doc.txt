@@ -1,0 +1,68 @@
+Connecting to 192.168.74.33 (UDP / DT) ...
+
+=== Device Info ===
+  Model                         : GW5K-DT
+  Serial                        : 55000DTS207W0886
+  Rated Power                   : 0 W
+  Firmware                      : DSP:808
+  ARM Firmware                  : 6
+
+=== Runtime Data ===
+  derating_mode                      : 0
+  derating_mode_label                : OK
+  e_day                              : 19,70
+  e_total                            : 177,80
+  error_codes                        : 0
+  errors                             : OK
+  fgrid1                             : 49,97
+  fgrid2                             : 49,98
+  fgrid3                             : 50,00
+  funbit                             : 0
+  h_total                            : 106
+  house_consumption                  : 954
+  igrid1                             : 1,40
+  igrid2                             : 1,40
+  igrid3                             : 1,40
+  ipv1                               : 1,50
+  ipv2                               : 1,40
+  ipv3                               : 0,00
+  ipv4                               : 0,00
+  leakage_current                    : -0,00
+  meter_active_power                 : 0
+  meter_comm_label                   : Unknown(65535)
+  meter_comm_status                  : 65535
+  meter_e_total_exp                  : 4294967,29
+  meter_e_total_imp                  : 4294967,29
+  pgrid1                             : 327
+  pgrid2                             : 327
+  pgrid3                             : 325
+  ppv                                : 954
+  rssi                               : 78
+  safety_country                     : 32
+  safety_country_label               : Montenegro
+  temperature                        : 49,70
+  timestamp                          : 2026-06-06 16:37:07
+  total_input_power                  : 0
+  total_inverter_power               : 994
+  vbus                               : 610,70
+  vgrid1                             : 233,70
+  vgrid2                             : 233,50
+  vgrid3                             : 232,30
+  vline1                             : 404,00
+  vline2                             : 403,20
+  vline3                             : 404,50
+  vnbus                              : 313,80
+  vpv1                               : 391,60
+  vpv2                               : 262,00
+  vpv3                               : 0,00
+  vpv4                               : 0,00
+  warning_code                       : 0
+  work_mode                          : 1
+  work_mode_label                    : On-Grid
+
+=== Settings ===
+  Operation Mode                : General
+  Grid Export Limit             : Disabled
+  Grid Export Limit Value       : 0 W
+
+Press any key to exit...
