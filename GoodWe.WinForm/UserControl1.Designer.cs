@@ -31,13 +31,14 @@ namespace GoodWe.WinForm
 			ListViewItem listViewItem1 = new ListViewItem(new string[] { "Model", "-" }, -1);
 			ListViewItem listViewItem2 = new ListViewItem(new string[] { "Serial", "-" }, -1);
 			ListViewItem listViewItem3 = new ListViewItem(new string[] { "Rated Power", "-" }, -1);
-			comboBox1 = new ComboBox();
-			label2 = new Label();
+			cmbProtocol = new ComboBox();
 			textBox1 = new TextBox();
 			label1 = new Label();
 			button1 = new Button();
 			button2 = new Button();
 			groupBox1 = new GroupBox();
+			label2 = new Label();
+			cmbFamily = new ComboBox();
 			groupBox2 = new GroupBox();
 			listView1 = new ListView();
 			columnHeader1 = new ColumnHeader();
@@ -52,28 +53,19 @@ namespace GoodWe.WinForm
 			groupBox3.SuspendLayout();
 			SuspendLayout();
 			// 
-			// comboBox1
+			// cmbProtocol
 			// 
-			comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-			comboBox1.FormattingEnabled = true;
-			comboBox1.Items.AddRange(new object[] { "TCP (502)", "UDP (8899)" });
-			comboBox1.Location = new Point(267, 23);
-			comboBox1.Name = "comboBox1";
-			comboBox1.Size = new Size(94, 23);
-			comboBox1.TabIndex = 7;
-			// 
-			// label2
-			// 
-			label2.AutoSize = true;
-			label2.Location = new Point(198, 28);
-			label2.Name = "label2";
-			label2.Size = new Size(52, 15);
-			label2.TabIndex = 6;
-			label2.Text = "Protocol";
+			cmbProtocol.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmbProtocol.FormattingEnabled = true;
+			cmbProtocol.Items.AddRange(new object[] { "TCP (502)", "UDP (8899)" });
+			cmbProtocol.Location = new Point(134, 25);
+			cmbProtocol.Name = "cmbProtocol";
+			cmbProtocol.Size = new Size(94, 23);
+			cmbProtocol.TabIndex = 7;
 			// 
 			// textBox1
 			// 
-			textBox1.Location = new Point(85, 22);
+			textBox1.Location = new Point(28, 25);
 			textBox1.Name = "textBox1";
 			textBox1.Size = new Size(100, 23);
 			textBox1.TabIndex = 5;
@@ -84,14 +76,14 @@ namespace GoodWe.WinForm
 			label1.AutoSize = true;
 			label1.Location = new Point(5, 28);
 			label1.Name = "label1";
-			label1.Size = new Size(62, 15);
+			label1.Size = new Size(17, 15);
 			label1.TabIndex = 4;
-			label1.Text = "IP-address";
+			label1.Text = "IP";
 			// 
 			// button1
 			// 
 			button1.AllowDrop = true;
-			button1.Location = new Point(395, 30);
+			button1.Location = new Point(16, 86);
 			button1.Name = "button1";
 			button1.Size = new Size(75, 23);
 			button1.TabIndex = 8;
@@ -102,7 +94,7 @@ namespace GoodWe.WinForm
 			// button2
 			// 
 			button2.Enabled = false;
-			button2.Location = new Point(395, 59);
+			button2.Location = new Point(97, 86);
 			button2.Name = "button2";
 			button2.Size = new Size(75, 23);
 			button2.TabIndex = 9;
@@ -112,21 +104,41 @@ namespace GoodWe.WinForm
 			// 
 			// groupBox1
 			// 
+			groupBox1.Controls.Add(label2);
+			groupBox1.Controls.Add(cmbFamily);
 			groupBox1.Controls.Add(textBox1);
 			groupBox1.Controls.Add(label1);
-			groupBox1.Controls.Add(label2);
-			groupBox1.Controls.Add(comboBox1);
+			groupBox1.Controls.Add(cmbProtocol);
 			groupBox1.Location = new Point(16, 21);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(373, 59);
 			groupBox1.TabIndex = 10;
 			groupBox1.TabStop = false;
-			groupBox1.Text = "connection settings";
+			groupBox1.Text = "Connection Settings";
+			// 
+			// label2
+			// 
+			label2.AutoSize = true;
+			label2.Location = new Point(245, 28);
+			label2.Name = "label2";
+			label2.Size = new Size(42, 15);
+			label2.TabIndex = 9;
+			label2.Text = "Family";
+			// 
+			// cmbFamily
+			// 
+			cmbFamily.DropDownStyle = ComboBoxStyle.DropDownList;
+			cmbFamily.FormattingEnabled = true;
+			cmbFamily.Items.AddRange(new object[] { "ET", "EH", "BT", "BH", "ES", "EM", "BP", "DT", "MS", "XS" });
+			cmbFamily.Location = new Point(293, 25);
+			cmbFamily.Name = "cmbFamily";
+			cmbFamily.Size = new Size(47, 23);
+			cmbFamily.TabIndex = 8;
 			// 
 			// groupBox2
 			// 
 			groupBox2.Controls.Add(listView1);
-			groupBox2.Location = new Point(16, 98);
+			groupBox2.Location = new Point(16, 127);
 			groupBox2.Name = "groupBox2";
 			groupBox2.Size = new Size(373, 122);
 			groupBox2.TabIndex = 11;
@@ -162,7 +174,7 @@ namespace GoodWe.WinForm
 			groupBox3.Controls.Add(listViewData);
 			groupBox3.Location = new Point(17, 255);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(373, 241);
+			groupBox3.Size = new Size(373, 206);
 			groupBox3.TabIndex = 12;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Data";
@@ -176,7 +188,7 @@ namespace GoodWe.WinForm
 			listViewData.HeaderStyle = ColumnHeaderStyle.None;
 			listViewData.Location = new Point(21, 27);
 			listViewData.Name = "listViewData";
-			listViewData.Size = new Size(340, 208);
+			listViewData.Size = new Size(340, 173);
 			listViewData.TabIndex = 0;
 			listViewData.UseCompatibleStateImageBehavior = false;
 			listViewData.View = View.Details;
@@ -195,7 +207,7 @@ namespace GoodWe.WinForm
 			// labelStatus
 			// 
 			labelStatus.AutoSize = true;
-			labelStatus.Location = new Point(29, 225);
+			labelStatus.Location = new Point(193, 90);
 			labelStatus.Name = "labelStatus";
 			labelStatus.Size = new Size(51, 15);
 			labelStatus.TabIndex = 13;
@@ -212,7 +224,7 @@ namespace GoodWe.WinForm
 			Controls.Add(button2);
 			Controls.Add(button1);
 			Name = "UserControl1";
-			Size = new Size(481, 499);
+			Size = new Size(406, 464);
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
 			groupBox2.ResumeLayout(false);
@@ -223,8 +235,7 @@ namespace GoodWe.WinForm
 
 		#endregion
 
-		private ComboBox comboBox1;
-		private Label label2;
+		private ComboBox cmbProtocol;
 		private TextBox textBox1;
 		private Label label1;
 		private Button button1;
@@ -239,5 +250,7 @@ namespace GoodWe.WinForm
 		private ColumnHeader columnHeader3;
 		private ColumnHeader columnHeader4;
 		private Label labelStatus;
+		private ComboBox cmbFamily;
+		private Label label2;
 	}
 }

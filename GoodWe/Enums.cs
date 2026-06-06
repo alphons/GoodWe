@@ -1,5 +1,20 @@
 namespace GoodWe;
 
+public enum FamilyEnum
+{
+    Unknown,
+    ET,
+    EH,
+    BT,
+    BH,
+    ES,
+    EM,
+    BP,
+    DT,
+    MS,
+    XS
+}
+
 public enum SensorKind
 {
     PV = 1,

@@ -13,7 +13,7 @@ if (args.Length == 0)
 
 string host      = args[0];
 string transport = args.Length > 1 ? args[1].ToLower() : "udp";
-string? family   = args.Length > 2 ? args[2] : null;
+string family   = args.Length > 2 ? args[2] : "Unknown";
 
 Console.WriteLine($"Connecting to {host} ({transport.ToUpper()}{(family != null ? $" / {family}" : "")}) ...");
 
@@ -22,8 +22,8 @@ using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 try
 {
     await using var inverter = transport == "tcp"
-        ? await GoodWeClient.ConnectTcpAsync(host, family: family, ct: cts.Token)
-        : await GoodWeClient.ConnectAsync(host, family: family, ct: cts.Token);
+        ? await GoodWeClient.ConnectTcpAsync(host, family: Enum.Parse<FamilyEnum>(family), ct: cts.Token)
+        : await GoodWeClient.ConnectAsync(host, family: Enum.Parse<FamilyEnum>(family), ct: cts.Token);
 
     // ── Device info ────────────────────────────────────────────────────────
     Console.WriteLine();

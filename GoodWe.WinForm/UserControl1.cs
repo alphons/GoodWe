@@ -9,7 +9,8 @@ public partial class UserControl1 : UserControl
 	public UserControl1()
 	{
 		InitializeComponent();
-		comboBox1.SelectedIndex = 1; // UDP default
+		cmbProtocol.SelectedIndex = 1; // UDP default
+		cmbFamily.SelectedIndex = 7; // DT default
 	}
 
 	// ── Start ─────────────────────────────────────────────────────────────────
@@ -22,9 +23,9 @@ public partial class UserControl1 : UserControl
 
 		try
 		{
-			bool tcp = comboBox1.SelectedIndex == 0;
+			bool tcp = cmbProtocol.SelectedIndex == 0;
 			string host = textBox1.Text.Trim();
-			string family = "DT";
+			FamilyEnum family = Enum.Parse< FamilyEnum>(this.cmbFamily.Text);
 
 			cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 			inverter = tcp
