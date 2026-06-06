@@ -28,7 +28,7 @@ public partial class UserControl1 : UserControl
 		{
 			bool tcp = cmbProtocol.SelectedIndex == 0;
 			string host = textBox1.Text.Trim();
-			FamilyEnum family = Enum.Parse< FamilyEnum>(this.cmbFamily.Text);
+			FamilyEnum family = Enum.Parse<FamilyEnum>(this.cmbFamily.Text);
 
 			inverter = await GoodWeClient.ConnectAsync(host: host, tcp: tcp, family: family);
 
@@ -65,7 +65,7 @@ public partial class UserControl1 : UserControl
 
 	private void StartPolling()
 	{
-		pollTimer = new System.Windows.Forms.Timer { Interval = 30000 };
+		pollTimer = new System.Windows.Forms.Timer { Interval = 5000 };
 		pollTimer.Tick += async (_, _) => await PollAsync();
 		pollTimer.Start();
 
@@ -85,6 +85,10 @@ public partial class UserControl1 : UserControl
 		try
 		{
 			var data = await inverter.ReadRuntimeDataAsync();
+			var dictPowerLimit = await inverter.ReadSettingsDataAsync();
+			data.Add("grid_export_limit", dictPowerLimit["grid_export_limit"]);
+			data.Add("grid_export_limit_value", dictPowerLimit["grid_export_limit_value"]);
+
 			Invoke(() => UpdateData(data));
 		}
 		catch (Exception ex)
@@ -152,7 +156,7 @@ public partial class UserControl1 : UserControl
 
 		Add(listViewData, "AC Current L1/L2/L3",
 			$"{ToMyString(data["igrid1"])}/{ToMyString(data["igrid2"])}/{ToMyString(data["igrid3"])} A");
-		Add(listViewData, "AC Voltage L1/L2/L3", 
+		Add(listViewData, "AC Voltage L1/L2/L3",
 			$"{ToMyString(data["vgrid1"])}/{ToMyString(data["vgrid2"])}/{ToMyString(data["vgrid3"])} V");
 
 		Add(listViewData, "AC Power",
@@ -160,6 +164,12 @@ public partial class UserControl1 : UserControl
 
 		Add(listViewData, "AC Frequency",
 			$"{ToMyString(data["fgrid1"])} Hz");
+
+		Add(listViewData, "Power Limit",
+			$"{ToMyString(data["grid_export_limit"])}");
+
+		Add(listViewData, "Power Limit Value",
+			$"{ToMyString(data["grid_export_limit_value"])} W");
 
 		//foreach (var kv in data.OrderBy(k => k.Key))
 		//	Add(listViewData, kv.Key, kv.Value);
@@ -187,5 +197,14 @@ public partial class UserControl1 : UserControl
 			inverter = null;
 		}
 		base.OnHandleDestroyed(e);
+	}
+
+	private async void PowerLimit_CheckedChanged(object sender, EventArgs e)
+	{
+		bool powerLimitEnabled = this.checkBox1.Checked;
+		if (inverter is not null)
+		{
+			await inverter.SetGridExportLimitAsync(powerLimitEnabled);
+		}
 	}
 }

@@ -51,12 +51,10 @@ try
 	var opMode = await inverter.GetOperationModeAsync(cts.Token);
 	PrintRow("Operation Mode", opMode.ToString());
 
-	try
-	{
-		int exportLimit = await inverter.GetGridExportLimitAsync(cts.Token);
-		PrintRow("Grid Export Limit", $"{exportLimit} W");
-	}
-	catch { /* not all inverters support export limit */ }
+	var dictSettings = await inverter.ReadSettingsDataAsync(CancellationToken.None);
+
+	PrintRow("Grid Export Limit", $"{dictSettings["grid_export_limit"]}");
+	PrintRow("Grid Export Limit Value", $"{dictSettings["grid_export_limit_value"]} W");
 
 	Console.WriteLine();
 	Console.WriteLine("Press any key to exit...");

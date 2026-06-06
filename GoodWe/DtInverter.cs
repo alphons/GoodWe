@@ -162,8 +162,11 @@ public class DtInverter(InverterProtocol protocol) : Inverter(protocol)
 		{
 			var resp = await SendReadAsync(40326, 20, ct);
 			resp.Seek(40327);
-			result["grid_export_enabled"] = SensorHelper.ReadU16(resp);
-			result["grid_export_limit"] = SensorHelper.ReadU16(resp);
+			if (SensorHelper.ReadU16(resp) == 1)
+				result["grid_export_limit"] = "Enabled";
+			else
+				result["grid_export_limit"] = "Disabled";
+			result["grid_export_limit_value"] = SensorHelper.ReadU16(resp);
 		}
 		catch { /* optional */ }
 		return result;
@@ -176,7 +179,10 @@ public class DtInverter(InverterProtocol protocol) : Inverter(protocol)
 		return SensorHelper.ReadU16(resp);
 	}
 
-	public override Task SetGridExportLimitAsync(int exportLimitW, CancellationToken ct = default) =>
+	public override Task SetGridExportLimitAsync(bool exportEnabled, CancellationToken ct = default) =>
+		SendWriteAsync(40327, exportEnabled ? (ushort)1 : (ushort) 0, ct);
+
+	public override Task SetGridExportLimitValueAsync(int exportLimitW, CancellationToken ct = default) =>
 		SendWriteAsync(40328, (ushort)exportLimitW, ct);
 
 	public override Task<OperationMode> GetOperationModeAsync(CancellationToken ct = default) =>

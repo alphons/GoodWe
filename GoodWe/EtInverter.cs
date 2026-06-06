@@ -201,7 +201,12 @@ public class EtInverter(InverterProtocol protocol) : Inverter(protocol)
 		return SensorHelper.ReadU16(resp);
 	}
 
-	public override async Task SetGridExportLimitAsync(int exportLimitW, CancellationToken ct = default)
+	public override async Task SetGridExportLimitAsync(bool limitEnabled, CancellationToken ct = default)
+	{
+		return;
+	}
+
+	public override async Task SetGridExportLimitValueAsync(int exportLimitW, CancellationToken ct = default)
 	{
 		await SendWriteAsync(47509, (ushort)exportLimitW, ct);
 	}

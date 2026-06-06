@@ -50,6 +50,7 @@ namespace GoodWe.WinForm
 			columnHeader3 = new ColumnHeader();
 			columnHeader4 = new ColumnHeader();
 			labelStatus = new Label();
+			checkBox1 = new CheckBox();
 			groupBox1.SuspendLayout();
 			groupBox2.SuspendLayout();
 			groupBox3.SuspendLayout();
@@ -174,9 +175,9 @@ namespace GoodWe.WinForm
 			// 
 			groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			groupBox3.Controls.Add(listViewData);
-			groupBox3.Location = new Point(4, 243);
+			groupBox3.Location = new Point(4, 275);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(373, 249);
+			groupBox3.Size = new Size(373, 271);
 			groupBox3.TabIndex = 12;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Data";
@@ -190,7 +191,7 @@ namespace GoodWe.WinForm
 			listViewData.HeaderStyle = ColumnHeaderStyle.None;
 			listViewData.Location = new Point(21, 27);
 			listViewData.Name = "listViewData";
-			listViewData.Size = new Size(340, 216);
+			listViewData.Size = new Size(340, 238);
 			listViewData.TabIndex = 0;
 			listViewData.UseCompatibleStateImageBehavior = false;
 			listViewData.View = View.Details;
@@ -215,10 +216,22 @@ namespace GoodWe.WinForm
 			labelStatus.TabIndex = 13;
 			labelStatus.Text = "Stopped";
 			// 
+			// checkBox1
+			// 
+			checkBox1.AutoSize = true;
+			checkBox1.Location = new Point(26, 243);
+			checkBox1.Name = "checkBox1";
+			checkBox1.Size = new Size(124, 19);
+			checkBox1.TabIndex = 14;
+			checkBox1.Text = "Power limit enable";
+			checkBox1.UseVisualStyleBackColor = true;
+			checkBox1.CheckedChanged += PowerLimit_CheckedChanged;
+			// 
 			// UserControl1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
+			Controls.Add(checkBox1);
 			Controls.Add(labelStatus);
 			Controls.Add(groupBox3);
 			Controls.Add(groupBox2);
@@ -226,7 +239,7 @@ namespace GoodWe.WinForm
 			Controls.Add(button2);
 			Controls.Add(button1);
 			Name = "UserControl1";
-			Size = new Size(384, 495);
+			Size = new Size(384, 549);
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
 			groupBox2.ResumeLayout(false);
@@ -254,5 +267,6 @@ namespace GoodWe.WinForm
 		private Label labelStatus;
 		private ComboBox cmbFamily;
 		private Label label2;
+		private CheckBox checkBox1;
 	}
 }

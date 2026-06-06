@@ -34,16 +34,16 @@ namespace GoodWe.WinForm
 			// userControl11
 			// 
 			userControl11.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-			userControl11.Location = new Point(12, 12);
+			userControl11.Location = new Point(2, 12);
 			userControl11.Name = "userControl11";
-			userControl11.Size = new Size(384, 495);
+			userControl11.Size = new Size(384, 549);
 			userControl11.TabIndex = 0;
 			// 
 			// Form1
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(398, 508);
+			ClientSize = new Size(398, 568);
 			Controls.Add(userControl11);
 			Name = "Form1";
 			Text = "GoodWe 1.0";
