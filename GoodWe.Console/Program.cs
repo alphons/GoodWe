@@ -2,18 +2,18 @@ using GoodWe;
 
 if (args.Length == 0)
 {
-    Console.WriteLine("Usage: GoodWe.Console <inverter-ip> [udp|tcp] [family]");
-    Console.WriteLine("  family: ET (default), ES, DT");
-    Console.WriteLine();
-    Console.WriteLine("Example: GoodWe.Console 192.168.1.100");
-    Console.WriteLine("         GoodWe.Console 192.168.1.100 udp DT");
-    Console.WriteLine("         GoodWe.Console 192.168.1.100 tcp ET");
-    return 1;
+	Console.WriteLine("Usage: GoodWe.Console <inverter-ip> [udp|tcp] [family]");
+	Console.WriteLine("  family: ET (default), ES, DT");
+	Console.WriteLine();
+	Console.WriteLine("Example: GoodWe.Console 192.168.1.100");
+	Console.WriteLine("         GoodWe.Console 192.168.1.100 udp DT");
+	Console.WriteLine("         GoodWe.Console 192.168.1.100 tcp ET");
+	return 1;
 }
 
-string host      = args[0];
+string host = args[0];
 string transport = args.Length > 1 ? args[1].ToLower() : "udp";
-string family   = args.Length > 2 ? args[2] : "Unknown";
+string family = args.Length > 2 ? args[2] : "Unknown";
 
 Console.WriteLine($"Connecting to {host} ({transport.ToUpper()}{(family != null ? $" / {family}" : "")}) ...");
 
@@ -21,88 +21,92 @@ using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
 try
 {
-    await using var inverter = transport == "tcp"
-        ? await GoodWeClient.ConnectTcpAsync(host, family: Enum.Parse<FamilyEnum>(family!), ct: cts.Token)
-        : await GoodWeClient.ConnectAsync(host, family: Enum.Parse<FamilyEnum>(family!), ct: cts.Token);
+	bool tcp = transport == "tcp";
 
-    // ── Device info ────────────────────────────────────────────────────────
-    Console.WriteLine();
-    PrintHeader("Device Info");
-    PrintRow("Model",        inverter.ModelName);
-    PrintRow("Serial",       inverter.SerialNumber);
-    PrintRow("Rated Power",  $"{inverter.RatedPower} W");
-    PrintRow("Firmware",     inverter.Firmware);
-    PrintRow("ARM Firmware", inverter.ArmFirmware);
+	await using var inverter = await GoodWeClient.ConnectAsync(host,
+		tcp: tcp, family: Enum.Parse<FamilyEnum>(family!), ct: cts.Token);
 
-    // ── Runtime data ───────────────────────────────────────────────────────
-    Console.WriteLine();
-    PrintHeader("Runtime Data");
-    var data = await inverter.ReadRuntimeDataAsync(cts.Token);
-    PrintAllData(data);
+	if (inverter == null)
+		return 1;
 
-    // ── Settings ───────────────────────────────────────────────────────────
-    Console.WriteLine();
-    PrintHeader("Settings");
+	// ── Device info ────────────────────────────────────────────────────────
+	Console.WriteLine();
+	PrintHeader("Device Info");
+	PrintRow("Model", inverter.ModelName);
+	PrintRow("Serial", inverter.SerialNumber);
+	PrintRow("Rated Power", $"{inverter.RatedPower} W");
+	PrintRow("Firmware", inverter.Firmware);
+	PrintRow("ARM Firmware", inverter.ArmFirmware);
 
-    var opMode = await inverter.GetOperationModeAsync(cts.Token);
-    PrintRow("Operation Mode", opMode.ToString());
+	// ── Runtime data ───────────────────────────────────────────────────────
+	Console.WriteLine();
+	PrintHeader("Runtime Data");
+	var data = await inverter.ReadRuntimeDataAsync(cts.Token);
+	PrintAllData(data);
 
-    try
-    {
-        int exportLimit = await inverter.GetGridExportLimitAsync(cts.Token);
-        PrintRow("Grid Export Limit", $"{exportLimit} W");
-    }
-    catch { /* not all inverters support export limit */ }
+	// ── Settings ───────────────────────────────────────────────────────────
+	Console.WriteLine();
+	PrintHeader("Settings");
 
-    Console.WriteLine();
-    Console.WriteLine("Press any key to exit...");
-    Console.ReadKey(intercept: true);
-    return 0;
+	var opMode = await inverter.GetOperationModeAsync(cts.Token);
+	PrintRow("Operation Mode", opMode.ToString());
+
+	try
+	{
+		int exportLimit = await inverter.GetGridExportLimitAsync(cts.Token);
+		PrintRow("Grid Export Limit", $"{exportLimit} W");
+	}
+	catch { /* not all inverters support export limit */ }
+
+	Console.WriteLine();
+	Console.WriteLine("Press any key to exit...");
+	Console.ReadKey(intercept: true);
+	return 0;
 }
 catch (MaxRetriesException)
 {
-    Console.Error.WriteLine($"Error: no response from {host} after retries. Check IP and network.");
-    return 2;
+	Console.Error.WriteLine($"Error: no response from {host} after retries. Check IP and network.");
+	return 2;
 }
 catch (InverterError ex)
 {
-    Console.Error.WriteLine($"Inverter error: {ex.Message}");
-    return 3;
+	Console.Error.WriteLine($"Inverter error: {ex.Message}");
+	return 3;
 }
 catch (OperationCanceledException)
 {
-    Console.Error.WriteLine("Timed out.");
-    return 4;
+	Console.Error.WriteLine("Timed out.");
+	return 4;
 }
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 static void PrintHeader(string title)
 {
-    Console.WriteLine($"=== {title} ===");
+	Console.WriteLine($"=== {title} ===");
 }
 
 static void PrintRow(string label, string? value)
 {
-    Console.WriteLine($"  {label,-30}: {value ?? "n/a"}");
+	Console.WriteLine($"  {label,-30}: {value ?? "n/a"}");
 }
 
 static void PrintAllData(Dictionary<string, object?> data)
 {
-    // Separate into measurements (have numeric/typed values) and labels/codes
-    // Sort by key so output is predictable
-    foreach (var kv in data.OrderBy(k => k.Key))
-    {
-        if (kv.Value is null) continue;
+	// Separate into measurements (have numeric/typed values) and labels/codes
+	// Sort by key so output is predictable
+	foreach (var kv in data.OrderBy(k => k.Key))
+	{
+		if (kv.Value is null) continue;
 
-        string display = kv.Value switch
-        {
-            double  d  => $"{d:F2}",
-            float   f  => $"{f:F2}",
-            DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss"),
-            _          => kv.Value.ToString() ?? ""
-        };
+		string display = kv.Value switch
+		{
+			double d => $"{d:F2}",
+			float f => $"{f:F2}",
+			DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss"),
+			_ => kv.Value.ToString() ?? ""
+		};
 
-        Console.WriteLine($"  {kv.Key,-35}: {display}");
-    }
+		Console.WriteLine($"  {kv.Key,-35}: {display}");
+	}
 }

@@ -121,7 +121,7 @@ namespace GoodWe.WinForm
 			// label2
 			// 
 			label2.AutoSize = true;
-			label2.Location = new Point(245, 28);
+			label2.Location = new Point(234, 28);
 			label2.Name = "label2";
 			label2.Size = new Size(42, 15);
 			label2.TabIndex = 9;
@@ -131,10 +131,10 @@ namespace GoodWe.WinForm
 			// 
 			cmbFamily.DropDownStyle = ComboBoxStyle.DropDownList;
 			cmbFamily.FormattingEnabled = true;
-			cmbFamily.Items.AddRange(new object[] { "ET", "EH", "BT", "BH", "ES", "EM", "BP", "DT", "MS", "XS" });
-			cmbFamily.Location = new Point(293, 25);
+			cmbFamily.Items.AddRange(new object[] { "Unknown", "ET", "EH", "BT", "BH", "ES", "EM", "BP", "DT", "MS", "XS" });
+			cmbFamily.Location = new Point(282, 25);
 			cmbFamily.Name = "cmbFamily";
-			cmbFamily.Size = new Size(47, 23);
+			cmbFamily.Size = new Size(79, 23);
 			cmbFamily.TabIndex = 8;
 			// 
 			// groupBox2

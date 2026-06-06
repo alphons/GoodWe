@@ -5,10 +5,25 @@ namespace GoodWe;
 
 public static class GoodWeClient
 {
+	public static async Task<Inverter?> ConnectAsync(string host,
+		bool tcp = true,
+		FamilyEnum family = FamilyEnum.Unknown,
+		byte commAddr = 0,
+		int timeout = 2,
+		int retries = 3,
+		CancellationToken ct = default)
+	{
+		if (tcp)
+			return await ConnectTcpAsync(host, Constants.GoodWeTcpPort,
+				family, commAddr, timeout, retries, ct);
+		else
+			return await ConnectUdpAsync(host, Constants.GoodWeUdpPort, 
+				family, commAddr, timeout, retries, ct);
+	}
 	/// <summary>
 	/// Connect to a GoodWe inverter. Auto-detects the inverter family.
 	/// </summary>
-	public static async Task<Inverter> ConnectAsync(
+	private static async Task<Inverter> ConnectUdpAsync(
 		string host,
 		int port = Constants.GoodWeUdpPort,
 		FamilyEnum family = FamilyEnum.Unknown,
@@ -19,10 +34,11 @@ public static class GoodWeClient
 	{
 		if (family != FamilyEnum.Unknown)
 		{
+			using CancellationTokenSource cts = new(1000);
 			byte addr = commAddr != 0 ? commAddr : DefaultCommAddr(family);
 			var proto = new UdpInverterProtocol(host, port, addr, timeout, retries);
 			var inv = CreateInverter(family, proto);
-			await inv.ReadDeviceInfoAsync(ct);
+			await inv.ReadDeviceInfoAsync(cts.Token);
 			return inv;
 		}
 
@@ -32,7 +48,7 @@ public static class GoodWeClient
 	/// <summary>
 	/// Connect via Modbus/TCP (port 502).
 	/// </summary>
-	public static async Task<Inverter> ConnectTcpAsync(
+	private static async Task<Inverter?> ConnectTcpAsync(
 		string host,
 		int port = Constants.GoodWeTcpPort,
 		FamilyEnum family = FamilyEnum.Unknown,
@@ -41,17 +57,25 @@ public static class GoodWeClient
 		int retries = 3,
 		CancellationToken ct = default)
 	{
-		if (family != FamilyEnum.Unknown)
+		try
 		{
-			byte addr = commAddr != 0x01 ? commAddr : DefaultCommAddr(family);
-			var proto = new TcpInverterProtocol(host, port, addr, timeout, retries);
-			var inv = CreateInverter(family, proto);
-			await inv.ReadDeviceInfoAsync(ct);
-			return inv;
-		}
+			if (family != FamilyEnum.Unknown)
+			{
+				using CancellationTokenSource cts = new(1000);
+				byte addr = commAddr != 0x01 ? commAddr : DefaultCommAddr(family);
+				var proto = new TcpInverterProtocol(host, port, addr, timeout, retries);
+				var inv = CreateInverter(family, proto);
+				await inv.ReadDeviceInfoAsync(cts.Token);
+				return inv;
+			}
 
-		//var protocol = new TcpInverterProtocol(host, port, commAddr, timeout, retries);
-		return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, ct, tcp: true);
+			//var protocol = new TcpInverterProtocol(host, port, commAddr, timeout, retries);
+			return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, ct, tcp: true);
+		}
+		catch(Exception exception)
+		{
+			return default;
+		}
 	}
 
 	/// <summary>
@@ -81,7 +105,7 @@ public static class GoodWeClient
 
 	private static async Task<Inverter> DiscoverFamilyAsync(
 		string host, int port, byte commAddr, int timeout, int retries, 
-		CancellationToken ct,
+		CancellationToken ct = default,
 		bool tcp = false)
 	{
 		foreach (var family in new[] { FamilyEnum.ET, FamilyEnum.ES, FamilyEnum.DT })
@@ -92,11 +116,14 @@ public static class GoodWeClient
 				: new UdpInverterProtocol(host, port, addr, timeout, retries);
 			try
 			{
+				using CancellationTokenSource cts = new (1000);
 				var inv = CreateInverter(family, proto);
-				await inv.ReadDeviceInfoAsync(ct);
+				await inv.ReadDeviceInfoAsync(cts.Token);
+				if (inv.ModelName!.Contains("Unknown"))
+					throw new RequestFailedException("Unknown");
 				return inv;
 			}
-			catch (Exception ex) when (ex is RequestFailedException or MaxRetriesException)
+			catch (Exception ex) when (ex is RequestFailedException or MaxRetriesException or OperationCanceledException)
 			{
 				await proto.DisposeAsync();
 				// try next family

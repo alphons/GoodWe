@@ -3,14 +3,17 @@ namespace GoodWe.WinForm;
 public partial class UserControl1 : UserControl
 {
 	private Inverter? inverter;
-	private CancellationTokenSource? cts;
 	private System.Windows.Forms.Timer? pollTimer;
 
 	public UserControl1()
 	{
 		InitializeComponent();
+
+		// SearchInvertersAsync does not work
+		// await GoodWeClient.SearchInvertersAsync(30000, CancellationToken.None);
+
 		cmbProtocol.SelectedIndex = 1; // UDP default
-		cmbFamily.SelectedIndex = 7; // DT default
+		cmbFamily.SelectedIndex = 8; // DT default
 	}
 
 	// ── Start ─────────────────────────────────────────────────────────────────
@@ -27,10 +30,10 @@ public partial class UserControl1 : UserControl
 			string host = textBox1.Text.Trim();
 			FamilyEnum family = Enum.Parse< FamilyEnum>(this.cmbFamily.Text);
 
-			cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-			inverter = tcp
-				? await GoodWeClient.ConnectTcpAsync(host: host, family: family, ct: cts.Token)
-				: await GoodWeClient.ConnectAsync(host: host, family: family, ct: cts.Token);
+			inverter = await GoodWeClient.ConnectAsync(host: host, tcp: tcp, family: family);
+
+			if (inverter == null)
+				return;
 
 			UpdateDeviceInfo();
 			StartPolling();
