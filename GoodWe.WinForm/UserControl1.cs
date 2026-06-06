@@ -100,30 +100,68 @@ public partial class UserControl1 : UserControl
 
 		items[0].SubItems[1].Text = inverter.ModelName ?? "–";
 		items[1].SubItems[1].Text = inverter.SerialNumber ?? "–";
-		items[2].SubItems[1].Text = $"{inverter.RatedPower} W";
+		items[2].SubItems[1].Text = $"{inverter.Firmware}";
+		items[3].SubItems[1].Text = $"{inverter.ArmVersion}";
+		items[4].SubItems[1].Text = $"{inverter.RatedPower} W";
+	}
+
+	private static string? ToMyString(object? value)
+	{
+		return value switch
+		{
+			null => null,
+			double d => $"{d:F2}",
+			float f => $"{f:F2}",
+			DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss"),
+			_ => value.ToString() ?? "",
+		};
+	}
+
+	private static void Add(ListView lv, string name, object? value)
+	{
+		if (value == null)
+			return;
+		var item = new ListViewItem(name);
+		item.SubItems.Add(ToMyString(value));
+		lv.Items.Add(item);
 	}
 
 	private void UpdateData(Dictionary<string, object?> data)
 	{
-		labelStatus.Text = $"Updated: {DateTime.Now:HH:mm:ss}";
+		this.labelStatus.Text = $"Updated: {ToMyString(data["timestamp"])}";
 
-		listViewData.BeginUpdate();
-		listViewData.Items.Clear();
-		foreach (var kv in data.OrderBy(k => k.Key))
-		{
-			if (kv.Value is null) continue;
-			string display = kv.Value switch
-			{
-				double d => $"{d:F2}",
-				float f => $"{f:F2}",
-				DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss"),
-				_ => kv.Value.ToString() ?? "",
-			};
-			var item = new ListViewItem(kv.Key);
-			item.SubItems.Add(display);
-			listViewData.Items.Add(item);
-		}
-		listViewData.EndUpdate();
+		this.listViewData.BeginUpdate();
+		this.listViewData.Items.Clear();
+
+		Add(listViewData, "Total Power",
+			$"{ToMyString(data["e_total"])} kWh");
+
+		Add(listViewData, "Daily Power",
+			$"{ToMyString(data["e_day"])} kWh");
+
+		Add(listViewData, "Grid Code",
+			$"{ToMyString(data["safety_country"])}");
+
+		Add(listViewData, "PV1",
+			$"{ToMyString(data["ipv1"])} A {ToMyString(data["vpv1"])} V");
+		Add(listViewData, "PV2",
+			$"{ToMyString(data["ipv2"])} A {ToMyString(data["vpv2"])} V");
+
+		Add(listViewData, "AC Current L1/L2/L3",
+			$"{ToMyString(data["igrid1"])}/{ToMyString(data["igrid2"])}/{ToMyString(data["igrid3"])} A");
+		Add(listViewData, "AC Voltage L1/L2/L3", 
+			$"{ToMyString(data["vgrid1"])}/{ToMyString(data["vgrid2"])}/{ToMyString(data["vgrid3"])} V");
+
+		Add(listViewData, "AC Power",
+			$"{ToMyString(data["total_inverter_power"])} W");
+
+		Add(listViewData, "AC Frequency",
+			$"{ToMyString(data["fgrid1"])} Hz");
+
+		//foreach (var kv in data.OrderBy(k => k.Key))
+		//	Add(listViewData, kv.Key, kv.Value);
+
+		this.listViewData.EndUpdate();
 	}
 
 	private void ResetUi()

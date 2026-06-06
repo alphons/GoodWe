@@ -213,9 +213,9 @@ public class EnumSensor : Sensor
 	}
 }
 
-public class TimestampSensor : Sensor
+public class TimestampSensorET : Sensor
 {
-	public TimestampSensor(string id, int offset, string name)
+	public TimestampSensorET(string id, int offset, string name)
 		: base(id, offset, name, "", null) { }
 	protected override object? ReadValue(ProtocolResponse d)
 	{
@@ -223,6 +223,21 @@ public class TimestampSensor : Sensor
 		try
 		{
 			return new DateTime(2000 + b[0], b[1], b[2], b[4], b[6], b[8]);
+		}
+		catch { return null; }
+	}
+}
+
+public class TimestampSensorDT : Sensor
+{
+	public TimestampSensorDT(string id, int offset, string name)
+		: base(id, offset, name, "", null) { }
+	protected override object? ReadValue(ProtocolResponse d)
+	{
+		var b = d.Read(6);
+		try
+		{
+			return new DateTime(2000 + b[0], b[1], b[2], b[3], b[4], b[5]);
 		}
 		catch { return null; }
 	}

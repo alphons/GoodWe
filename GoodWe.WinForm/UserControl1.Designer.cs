@@ -30,7 +30,9 @@ namespace GoodWe.WinForm
 		{
 			ListViewItem listViewItem1 = new ListViewItem(new string[] { "Model", "-" }, -1);
 			ListViewItem listViewItem2 = new ListViewItem(new string[] { "Serial", "-" }, -1);
-			ListViewItem listViewItem3 = new ListViewItem(new string[] { "Rated Power", "-" }, -1);
+			ListViewItem listViewItem3 = new ListViewItem(new string[] { "Firmware", "-" }, -1);
+			ListViewItem listViewItem4 = new ListViewItem(new string[] { "ARM", "-" }, -1);
+			ListViewItem listViewItem5 = new ListViewItem(new string[] { "Rated Power", "-" }, -1);
 			cmbProtocol = new ComboBox();
 			textBox1 = new TextBox();
 			label1 = new Label();
@@ -83,7 +85,7 @@ namespace GoodWe.WinForm
 			// button1
 			// 
 			button1.AllowDrop = true;
-			button1.Location = new Point(16, 86);
+			button1.Location = new Point(11, 68);
 			button1.Name = "button1";
 			button1.Size = new Size(75, 23);
 			button1.TabIndex = 8;
@@ -94,7 +96,7 @@ namespace GoodWe.WinForm
 			// button2
 			// 
 			button2.Enabled = false;
-			button2.Location = new Point(97, 86);
+			button2.Location = new Point(92, 68);
 			button2.Name = "button2";
 			button2.Size = new Size(75, 23);
 			button2.TabIndex = 9;
@@ -109,7 +111,7 @@ namespace GoodWe.WinForm
 			groupBox1.Controls.Add(textBox1);
 			groupBox1.Controls.Add(label1);
 			groupBox1.Controls.Add(cmbProtocol);
-			groupBox1.Location = new Point(16, 21);
+			groupBox1.Location = new Point(4, 3);
 			groupBox1.Name = "groupBox1";
 			groupBox1.Size = new Size(373, 59);
 			groupBox1.TabIndex = 10;
@@ -138,9 +140,9 @@ namespace GoodWe.WinForm
 			// groupBox2
 			// 
 			groupBox2.Controls.Add(listView1);
-			groupBox2.Location = new Point(16, 127);
+			groupBox2.Location = new Point(4, 97);
 			groupBox2.Name = "groupBox2";
-			groupBox2.Size = new Size(373, 122);
+			groupBox2.Size = new Size(373, 140);
 			groupBox2.TabIndex = 11;
 			groupBox2.TabStop = false;
 			groupBox2.Text = "Device Information";
@@ -151,10 +153,10 @@ namespace GoodWe.WinForm
 			listView1.FullRowSelect = true;
 			listView1.GridLines = true;
 			listView1.HeaderStyle = ColumnHeaderStyle.None;
-			listView1.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
+			listView1.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3, listViewItem4, listViewItem5 });
 			listView1.Location = new Point(21, 27);
 			listView1.Name = "listView1";
-			listView1.Size = new Size(340, 76);
+			listView1.Size = new Size(340, 104);
 			listView1.TabIndex = 0;
 			listView1.UseCompatibleStateImageBehavior = false;
 			listView1.View = View.Details;
@@ -172,9 +174,9 @@ namespace GoodWe.WinForm
 			// 
 			groupBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
 			groupBox3.Controls.Add(listViewData);
-			groupBox3.Location = new Point(17, 255);
+			groupBox3.Location = new Point(4, 243);
 			groupBox3.Name = "groupBox3";
-			groupBox3.Size = new Size(373, 206);
+			groupBox3.Size = new Size(373, 249);
 			groupBox3.TabIndex = 12;
 			groupBox3.TabStop = false;
 			groupBox3.Text = "Data";
@@ -188,7 +190,7 @@ namespace GoodWe.WinForm
 			listViewData.HeaderStyle = ColumnHeaderStyle.None;
 			listViewData.Location = new Point(21, 27);
 			listViewData.Name = "listViewData";
-			listViewData.Size = new Size(340, 173);
+			listViewData.Size = new Size(340, 216);
 			listViewData.TabIndex = 0;
 			listViewData.UseCompatibleStateImageBehavior = false;
 			listViewData.View = View.Details;
@@ -207,7 +209,7 @@ namespace GoodWe.WinForm
 			// labelStatus
 			// 
 			labelStatus.AutoSize = true;
-			labelStatus.Location = new Point(193, 90);
+			labelStatus.Location = new Point(188, 72);
 			labelStatus.Name = "labelStatus";
 			labelStatus.Size = new Size(51, 15);
 			labelStatus.TabIndex = 13;
@@ -224,7 +226,7 @@ namespace GoodWe.WinForm
 			Controls.Add(button2);
 			Controls.Add(button1);
 			Name = "UserControl1";
-			Size = new Size(406, 464);
+			Size = new Size(384, 495);
 			groupBox1.ResumeLayout(false);
 			groupBox1.PerformLayout();
 			groupBox2.ResumeLayout(false);

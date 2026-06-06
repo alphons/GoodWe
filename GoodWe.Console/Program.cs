@@ -22,8 +22,8 @@ using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 try
 {
     await using var inverter = transport == "tcp"
-        ? await GoodWeClient.ConnectTcpAsync(host, family: Enum.Parse<FamilyEnum>(family), ct: cts.Token)
-        : await GoodWeClient.ConnectAsync(host, family: Enum.Parse<FamilyEnum>(family), ct: cts.Token);
+        ? await GoodWeClient.ConnectTcpAsync(host, family: Enum.Parse<FamilyEnum>(family!), ct: cts.Token)
+        : await GoodWeClient.ConnectAsync(host, family: Enum.Parse<FamilyEnum>(family!), ct: cts.Token);
 
     // ── Device info ────────────────────────────────────────────────────────
     Console.WriteLine();
