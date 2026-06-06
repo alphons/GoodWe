@@ -42,7 +42,7 @@ public static class GoodWeClient
 			return inv;
 		}
 
-		return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, ct);
+		return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, tcp: false);
 	}
 
 	/// <summary>
@@ -69,10 +69,9 @@ public static class GoodWeClient
 				return inv;
 			}
 
-			//var protocol = new TcpInverterProtocol(host, port, commAddr, timeout, retries);
-			return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, ct, tcp: true);
+			return await DiscoverFamilyAsync(host, port, commAddr, timeout, retries, tcp: true);
 		}
-		catch(Exception exception)
+		catch
 		{
 			return default;
 		}
@@ -104,8 +103,7 @@ public static class GoodWeClient
 	}
 
 	private static async Task<Inverter> DiscoverFamilyAsync(
-		string host, int port, byte commAddr, int timeout, int retries, 
-		CancellationToken ct = default,
+		string host, int port, byte commAddr, int timeout, int retries,
 		bool tcp = false)
 	{
 		foreach (var family in new[] { FamilyEnum.ET, FamilyEnum.ES, FamilyEnum.DT })
