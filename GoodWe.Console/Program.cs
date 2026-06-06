@@ -54,7 +54,7 @@ try
 	var dictSettings = await inverter.ReadSettingsDataAsync(CancellationToken.None);
 
 	PrintRow("Grid Export Limit", $"{dictSettings["grid_export_limit"]}");
-	PrintRow("Grid Export Limit Value", $"{dictSettings["grid_export_limit_value"]} W");
+	PrintRow("Grid Export Limit Value", $"{dictSettings["grid_export_limit_value"]} %");
 
 	Console.WriteLine();
 	Console.WriteLine("Press any key to exit...");

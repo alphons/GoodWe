@@ -169,7 +169,7 @@ public partial class UserControl1 : UserControl
 			$"{ToMyString(data["grid_export_limit"])}");
 
 		Add(listViewData, "Power Limit Value",
-			$"{ToMyString(data["grid_export_limit_value"])} W");
+			$"{ToMyString(data["grid_export_limit_value"])} %");
 
 		//foreach (var kv in data.OrderBy(k => k.Key))
 		//	Add(listViewData, kv.Key, kv.Value);

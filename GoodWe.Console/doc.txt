@@ -63,6 +63,6 @@ Connecting to 192.168.74.33 (UDP / DT) ...
 === Settings ===
   Operation Mode                : General
   Grid Export Limit             : Disabled
-  Grid Export Limit Value       : 0 W
+  Grid Export Limit Value       : 0 %
 
 Press any key to exit...
