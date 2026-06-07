@@ -104,8 +104,8 @@ public class EsInverter(InverterProtocol protocol) : Inverter(protocol)
 		return;
 	}
 
-	public override Task SetGridExportLimitValueAsync(int exportLimitW, CancellationToken ct = default) =>
-		SendWriteAsync(25025, (ushort)exportLimitW, ct);
+	public override Task SetGridExportLimitValueAsync(int exportLimitValue, CancellationToken ct = default) =>
+		SendWriteAsync(25025, (ushort)exportLimitValue, ct);
 
 	public override async Task<OperationMode> GetOperationModeAsync(CancellationToken ct = default)
 	{

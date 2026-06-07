@@ -22,7 +22,7 @@ public abstract class Inverter : IAsyncDisposable
 	public abstract Task<Dictionary<string, object?>> ReadSettingsDataAsync(CancellationToken ct = default);
 	public abstract Task<int> GetGridExportLimitAsync(CancellationToken ct = default);
 	public abstract Task SetGridExportLimitAsync(bool exportEnabled, CancellationToken ct = default);
-	public abstract Task SetGridExportLimitValueAsync(int exportLimitW, CancellationToken ct = default);
+	public abstract Task SetGridExportLimitValueAsync(int exportLimitValue, CancellationToken ct = default);
 	public abstract Task<OperationMode> GetOperationModeAsync(CancellationToken ct = default);
 	public abstract Task SetOperationModeAsync(OperationMode mode, CancellationToken ct = default);
 	public abstract Task<int> GetBatterySocAsync(CancellationToken ct = default);

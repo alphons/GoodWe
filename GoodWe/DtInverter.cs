@@ -186,8 +186,8 @@ public class DtInverter(InverterProtocol protocol) : Inverter(protocol)
 	public override Task SetGridExportLimitAsync(bool exportEnabled, CancellationToken ct = default) =>
 		SendWriteAsync(40327, exportEnabled ? (ushort)1 : (ushort) 0, ct);
 
-	public override Task SetGridExportLimitValueAsync(int exportLimitW, CancellationToken ct = default) =>
-		SendWriteAsync(40336, (ushort)exportLimitW, ct);
+	public override Task SetGridExportLimitValueAsync(int exportLimitPercentage, CancellationToken ct = default) =>
+		SendWriteAsync(40336, (ushort)exportLimitPercentage, ct);
 
 	public override Task<OperationMode> GetOperationModeAsync(CancellationToken ct = default) =>
 		Task.FromResult(OperationMode.General);

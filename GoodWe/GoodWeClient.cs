@@ -9,7 +9,7 @@ public static class GoodWeClient
 		bool tcp = true,
 		FamilyEnum family = FamilyEnum.Unknown,
 		byte commAddr = 0,
-		int timeout = 2,
+		int timeout = 5,
 		int retries = 3,
 		CancellationToken ct = default)
 	{
@@ -28,7 +28,7 @@ public static class GoodWeClient
 		int port = Constants.GoodWeUdpPort,
 		FamilyEnum family = FamilyEnum.Unknown,
 		byte commAddr = 0,
-		int timeout = 2,
+		int timeout = 5,
 		int retries = 3,
 		CancellationToken ct = default)
 	{
